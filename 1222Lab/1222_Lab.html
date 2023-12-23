@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Float Number Comparison</title>
+    <style>
+        #diceContainer {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .dice {
+            margin: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 20%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 4px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <form action="#">
+        <input id="rollbutton" type="button" value="Roll Dice">
+    </form>
+    <div id="diceContainer">
+        <!-- First row -->
+        <img id="die1" class="dice" src="die1.png" alt="blank image">
+        <img id="die2" class="dice" src="die2.png" alt="blank image">
+        <img id="die3" class="dice" src="die3.png" alt="blank image">
+        <img id="die4" class="dice" src="die4.png" alt="blank image">
+        <img id="die5" class="dice" src="die5.png" alt="blank image">
+        <img id="die6" class="dice" src="die6.png" alt="blank image">
+    </div>
+
+    <div id="diceContainer">
+        <!-- Second row -->
+        <img id="die7" class="dice" src="die1.png" alt="blank image">
+        <img id="die8" class="dice" src="die2.png" alt="blank image">
+        <img id="die9" class="dice" src="die3.png" alt="blank image">
+        <img id="die10" class="dice" src="die4.png" alt="blank image">
+        <img id="die11" class="dice" src="die5.png" alt="blank image">
+        <img id="die12" class="dice" src="die6.png" alt="blank image">
+    </div>
+
+    <!--frequency table-->
+    <table>
+        <thead>
+            <tr>
+                <th bgcolor="#7878FF">Face</th>
+                <th bgcolor="#7878FF">Probability</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td bgcolor="#FFECC9">1</td>
+                <td id="prob1" bgcolor="#FFF7E8">0%</td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFECC9">2</td>
+                <td id="prob2" bgcolor="#FFF7E8">0%</td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFECC9">3</td>
+                <td id="prob3" bgcolor="#FFF7E8">0%</td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFECC9">4</td>
+                <td id="prob4" bgcolor="#FFF7E8">0%</td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFECC9">5</td>
+                <td id="prob5" bgcolor="#FFF7E8">0%</td>
+            </tr>
+            <tr>
+                <td bgcolor="#FFECC9">6</td>
+                <td id="prob6" bgcolor="#FFF7E8">0%</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <script>
+        function start(){
+            var button=document.getElementById("rollbutton");
+            button.addEventListener("click",rollDice);
+            
+            // Original six dices
+            die1Img=document.getElementById("die1");
+            die2Img=document.getElementById("die2");
+            die3Img=document.getElementById("die3");
+            die4Img=document.getElementById("die4");
+            die5Img=document.getElementById("die5");
+            die6Img=document.getElementById("die6");
+
+            // Additional six dices
+            die7Img=document.getElementById("die7");
+            die8Img=document.getElementById("die8");
+            die9Img=document.getElementById("die9");
+            die10Img=document.getElementById("die10");
+            die11Img=document.getElementById("die11");
+            die12Img=document.getElementById("die12");
+
+            // Frequency table cells
+            prob1 = document.getElementById("prob1");
+            prob2 = document.getElementById("prob2");
+            prob3 = document.getElementById("prob3");
+            prob4 = document.getElementById("prob4");
+            prob5 = document.getElementById("prob5");
+            prob6 = document.getElementById("prob6");
+        }
+
+        // Roll all twelve dices
+        function rollDice(){
+            var faceCounts = [0, 0, 0, 0, 0, 0];
+
+            // Roll each dice and update frequency
+            updateFaceCount(die1Img, faceCounts);
+            updateFaceCount(die2Img, faceCounts);
+            updateFaceCount(die3Img, faceCounts);
+            updateFaceCount(die4Img, faceCounts);
+            updateFaceCount(die5Img, faceCounts);
+            updateFaceCount(die6Img, faceCounts);
+            updateFaceCount(die7Img, faceCounts);
+            updateFaceCount(die8Img, faceCounts);
+            updateFaceCount(die9Img, faceCounts);
+            updateFaceCount(die10Img, faceCounts);
+            updateFaceCount(die11Img, faceCounts);
+            updateFaceCount(die12Img, faceCounts);
+
+            // Update probability in the table
+            updateProbability(faceCounts);
+        }
+
+        // Set image for a single die
+        function setImage(dieImg, face){
+            var dieValue=Math.floor(1+Math.random()*6);
+            dieImg.setAttribute("src","die"+dieValue+".png");
+            dieImg.setAttribute("alt","die image with "+dieValue+" spot(s)");
+            return dieValue;
+        }
+
+        // Update face count based on the rolled value
+        function updateFaceCount(dieImg, faceCounts){
+            var faceValue = setImage(dieImg);
+            faceCounts[faceValue - 1]++;
+        }
+
+        // Update probability in the table
+        function updateProbability(faceCounts){
+            var totalRolls = faceCounts.reduce((acc, count) => acc + count, 0);
+
+            for (var i = 0; i < faceCounts.length; i++) {
+                var probability = (faceCounts[i] / totalRolls) * 100;
+                probability = probability.toFixed(2) + "%";
+                updateProbabilityCell(i + 1, probability);
+            }
+        }
+
+        // Update probability cell in the table
+        function updateProbabilityCell(face, probability){
+            switch (face) {
+                case 1:
+                    prob1.textContent = probability;
+                    break;
+                case 2:
+                    prob2.textContent = probability;
+                    break;
+                case 3:
+                    prob3.textContent = probability;
+                    break;
+                case 4:
+                    prob4.textContent = probability;
+                    break;
+                case 5:
+                    prob5.textContent = probability;
+                    break;
+                case 6:
+                    prob6.textContent = probability;
+                    break;
+            }
+        }
+
+        window.addEventListener("load",start);   
+    </script>
+</body>
+</html>
+
+
+
+
+
+
